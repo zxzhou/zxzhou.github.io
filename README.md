@@ -1,18 +1,15 @@
-# Studorlio
+# Dave Zhou — Portfolio
 
-Studorlio is a template for your own personal site. You can have yours running on the cloud in exactly 10 seconds. But first, make sure you have a GitHub account. Ready, set, go!
+Personal portfolio site. Template forked from [Studorlio](https://github.com/helfi92/studorlio).
 
-![Display Image](https://raw.githubusercontent.com/helfi92/studorlio/master/assets/img/studorlio.png)
+**Dave Zhou** — AI builder. Empowered by AI, always solving real-world pain points.
 
-## Getting Started
-1. Fork the repository to make it yours.
-2. Rename the forked repository to `username.github.io`, where `username` is your GitHub username.
-3. That's it! Navigate to `username.github.io` to see your website :) 
+- Live site: [https://zxzhou.github.io](https://zxzhou.github.io)
+- LinkedIn: [linkedin.com/in/zxzhou](https://www.linkedin.com/in/zxzhou/)
 
-If this is your first time making a website and is having trouble getting started, that's ok. Head over to the [FAQ](#faq) section and let me try help you.
-
-## Demo
-[http://www.hassanali.me/studorlio/](http://www.hassanali.me/studorlio/)
+## Run locally
+1. Open `index.html` in your browser (double-click or Right click → Open with → browser).
+2. Or use a local server: `python3 -m http.server 8000` then visit http://localhost:8000
 
 ## FAQ
 * [How do I fork this repository?](#how-do-i-fork-this-repository)
