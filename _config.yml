@@ -1,0 +1,22 @@
+# Jekyll config for zxzhou.github.io (GitHub Pages)
+title: Dave Zhou
+description: AI builder. Portfolio and blog.
+baseurl: ""
+url: "https://zxzhou.github.io"
+
+# Blog at /blogs/
+permalink: /blogs/:year/:month/:day/:title/
+
+# No theme (custom layouts only); avoids processing theme gem SCSS
+theme: null
+
+# Build
+markdown: kramdown
+highlighter: rouge
+
+# Exclude from processing (keep as static)
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - vendor

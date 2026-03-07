@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% if page.title %}{{ page.title }} | {% endif %}Dave Zhou | AI Builder</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css">
+	<link rel="stylesheet" type="text/css" href="{{ '/assets/css/styles.css' | relative_url }}">
+	<link rel="icon" type="image/x-icon" href="{{ '/assets/img/favicon.png' | relative_url }}">
+	<meta name="author" content="Dave Zhou">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<nav class="nav container void-background">
+		<div class="nav-left">
+			<a href="https://github.com/zxzhou" class="nav-item"><span class="icon"><i class="fa fa-github"></i></span></a>
+			<a href="https://www.linkedin.com/in/zxzhou/" class="nav-item"><span class="icon"><i class="fa fa-linkedin"></i></span></a>
+		</div>
+		<div class="nav-right nav-menu">
+			<a class="nav-item" href="{{ '/' | relative_url }}">Home</a>
+			<a class="nav-item" href="{{ '/' | relative_url }}#about">About</a>
+			<a class="nav-item" href="{{ '/' | relative_url }}#projects">Projects</a>
+			<a class="nav-item" href="{{ '/blogs/' | relative_url }}">Blog</a>
+		</div>
+		<span class="nav-toggle"><span></span><span></span><span></span></span>
+	</nav>
+	<main class="section">
+		<div class="container">
+			{{ content }}
+		</div>
+	</main>
+	<section class="section-4 has-text-centered container">
+		<span>Dave Zhou</span>
+	</section>
+	<script src="{{ '/controller.js' | relative_url }}"></script>
+</body>
+</html>

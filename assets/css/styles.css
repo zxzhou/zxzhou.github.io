@@ -78,6 +78,45 @@ a.nav-item:hover {
 	border: 1px solid #e8e6e3;
 }
 
+/* Blog list spacing */
+.blog-posts {
+	list-style: none;
+	padding-left: 0;
+	margin-top: 1.5rem;
+}
+.blog-post-item {
+	margin-bottom: 1.5rem;
+	padding: 1.25rem 1.5rem;
+}
+.blog-post-title {
+	font-size: 1.25rem;
+	font-weight: 600;
+	margin: 0 0 0.5rem 0;
+	line-height: 1.4;
+}
+.blog-post-title a {
+	color: #333;
+	text-decoration: none;
+}
+.blog-post-title a:hover {
+	color: #0969da;
+}
+.blog-post-date {
+	font-size: 0.875rem;
+	color: #6e6e6e;
+	margin: 0 0 0.75rem 0;
+}
+.blog-post-excerpt {
+	margin: 0 0 0.75rem 0;
+	line-height: 1.5;
+	color: #444;
+}
+.blog-post-link {
+	display: inline-block;
+	font-weight: 500;
+	margin-top: 0.25rem;
+}
+
 .title {
 	color: #333;
 	text-align: left;
