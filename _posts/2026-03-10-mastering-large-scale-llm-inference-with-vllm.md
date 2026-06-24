@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Mastering Large-Scale LLM Inference with vLLM on Multi-GPU Servers"
-date: 2025-03-10
+date: 2026-03-10
 tags: [llm, vllm, inference, gpu, distributed-systems]
 excerpt: "A technical guide to high-throughput offline batch processing: PagedAttention, data vs tensor parallelism, TPS tuning, and production tips for 8× A100 machines."
 ---
