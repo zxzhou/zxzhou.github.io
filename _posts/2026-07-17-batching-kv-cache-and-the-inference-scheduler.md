@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Batching, KV Cache, and the Inference Scheduler"
-date: 2026-08-13
+date: 2026-07-17
 tags: [llm, inference, scheduling, batching, kv-cache]
 excerpt: "Study notes from the LLM Inference Handbook: continuous batching, PagedAttention, prefix caching, and why the inference scheduler is where GPU utilization becomes product latency."
 ---

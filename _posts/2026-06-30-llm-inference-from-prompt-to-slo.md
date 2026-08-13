@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "LLM Inference, From Prompt to SLO"
-date: 2026-08-13
+date: 2026-06-30
 tags: [llm, inference, performance, systems]
 excerpt: "Study notes from the LLM Inference Handbook: why inference is a request lifecycle problem before it is a model problem, and how TTFT, ITL, TPS, and goodput map to user experience."
 ---

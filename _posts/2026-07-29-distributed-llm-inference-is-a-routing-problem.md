@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Distributed LLM Inference Is a Routing Problem"
-date: 2026-08-13
+date: 2026-07-29
 tags: [llm, inference, distributed-systems, routing, gpu]
 excerpt: "Study notes from the LLM Inference Handbook: data, tensor, pipeline, and expert parallelism matter, but the production system lives or dies by routing requests to the right scarce state."
 ---

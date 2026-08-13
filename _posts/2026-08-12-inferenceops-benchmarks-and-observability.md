@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "InferenceOps: Benchmarks, Observability, and Framework Choice"
-date: 2026-08-13
+date: 2026-08-12
 tags: [llm, inferenceops, observability, benchmarking, production-ai]
 excerpt: "Study notes from the LLM Inference Handbook: production inference needs workload-specific benchmarks, visible SLOs, and runtime choices that match the bottleneck."
 ---

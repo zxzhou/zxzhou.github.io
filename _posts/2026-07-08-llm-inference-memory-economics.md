@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "LLM Inference Memory Economics"
-date: 2026-08-13
+date: 2026-07-08
 tags: [llm, inference, gpu, kv-cache, quantization]
 excerpt: "Study notes from the LLM Inference Handbook: why VRAM is the real capacity planner, how model weights and KV cache compete, and where quantization actually helps."
 ---
