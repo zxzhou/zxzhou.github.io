@@ -63,6 +63,48 @@ print(f"E2E latency: {req.e2e_ms / 1000:.1f} s")
 
 The numbers are illustrative, but the shape is the point. TTFT is mostly queueing plus prefill. End-to-end latency includes decode, and decode grows with output length. A single average latency number hides which part of the system actually needs work.
 
+The same page also explains the [attention mask](https://handbook.modular.com/llm-inference-basics/how-does-llm-inference-work.md#the-attention-mask): during autoregressive generation, a token can attend to earlier tokens, while future tokens remain hidden. This is the local rule that makes decode sequential. A simplified causal mask looks like this:
+
+```python
+def causal_attention_mask(n_tokens: int) -> list[list[int]]:
+    return [
+        [1 if key_pos <= query_pos else 0 for key_pos in range(n_tokens)]
+        for query_pos in range(n_tokens)
+    ]
+
+
+for row in causal_attention_mask(5):
+    print(row)
+
+# [1, 0, 0, 0, 0]
+# [1, 1, 0, 0, 0]
+# [1, 1, 1, 0, 0]
+# [1, 1, 1, 1, 0]
+# [1, 1, 1, 1, 1]
+```
+
+That mask is why prefill and decode feel different. During prefill, the server can process the prompt as a block and populate the KV cache. During decode, the model appends one token, updates the cache, then repeats.
+
+The Handbook's [context-window section](https://handbook.modular.com/llm-inference-basics/how-does-llm-inference-work.md#what-is-a-context-window-and-how-does-it-work-in-llm-inference) adds another detail that matters for agents and chat systems: the model receives the current conversation context on each request. A minimal prompt assembly function makes the cost visible:
+
+```python
+def assemble_chat_context(system_prompt, messages, max_context_tokens, tokenizer):
+    tokens = tokenizer.encode(system_prompt)
+
+    # Keep newest turns first when trimming, then restore chronological order.
+    kept = []
+    for msg in reversed(messages):
+        msg_tokens = tokenizer.encode(f"{msg['role']}: {msg['content']}")
+        if len(tokens) + sum(len(x) for x in kept) + len(msg_tokens) > max_context_tokens:
+            break
+        kept.append(msg_tokens)
+
+    full = tokens + [tok for msg in reversed(kept) for tok in msg]
+    return full
+```
+
+This is not a recommendation for production truncation policy. It is the basic accounting surface. A longer conversation becomes more prefill work unless the serving system can reuse prefix state.
+
 ## Metrics are a map of user pain
 
 The handbook's [metrics page](https://handbook.modular.com/llm-inference-basics/llm-inference-metrics.md) gives the vocabulary most teams need:
@@ -86,6 +128,19 @@ One way to keep yourself honest is to calculate goodput directly from traces:
 from statistics import quantiles
 
 
+def percentile(values, pct):
+    values = sorted(values)
+    index = round((len(values) - 1) * pct / 100)
+    return values[index]
+
+
+def token_intervals_ms(token_timestamps_ms):
+    return [
+        right - left
+        for left, right in zip(token_timestamps_ms, token_timestamps_ms[1:])
+    ]
+
+
 def summarize_requests(requests, ttft_slo_ms=800, e2e_slo_ms=8_000):
     total = len(requests)
     ok = [
@@ -95,17 +150,41 @@ def summarize_requests(requests, ttft_slo_ms=800, e2e_slo_ms=8_000):
     window_seconds = max(r["completed_at"] for r in requests) - min(
         r["started_at"] for r in requests
     )
-    p99_ttft = quantiles([r["ttft_ms"] for r in requests], n=100)[98]
+    all_itl = [
+        delta
+        for r in requests
+        for delta in token_intervals_ms(r["token_timestamps_ms"])
+    ]
 
     return {
         "request_count": total,
         "slo_pass_rate": len(ok) / total,
         "goodput_rps": len(ok) / window_seconds,
-        "p99_ttft_ms": p99_ttft,
+        "p50_ttft_ms": percentile([r["ttft_ms"] for r in requests], 50),
+        "p99_ttft_ms": percentile([r["ttft_ms"] for r in requests], 99),
+        "p99_itl_ms": percentile(all_itl, 99) if all_itl else None,
     }
 ```
 
 This small function changes the tuning conversation. You stop asking only whether a new configuration increases TPS. You also ask whether the extra tokens preserve the latency contract.
+
+The trace schema behind that function can stay small:
+
+```json
+{
+  "request_id": "req_123",
+  "model": "example-model",
+  "prompt_tokens": 4096,
+  "output_tokens": 512,
+  "queued_at_ms": 0,
+  "prefill_started_at_ms": 12,
+  "first_token_at_ms": 340,
+  "completed_at_ms": 7340,
+  "token_timestamps_ms": [340, 361, 383, 404]
+}
+```
+
+The fields map directly to the Handbook metrics. `first_token_at_ms - queued_at_ms` gives TTFT. Consecutive token timestamps give ITL. `completed_at_ms - queued_at_ms` gives end-to-end latency. `prompt_tokens + output_tokens` feeds throughput. Goodput is the subset of completed requests that also satisfy the SLO.
 
 ## The lifecycle view prevents local optimization
 
